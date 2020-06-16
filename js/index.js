@@ -1,55 +1,63 @@
-// ITERATION 1
 
-function updateSubtotal(product) {
-  console.log("Calculating subtotal, yey!");
 
-  //... your code goes here
-  const price = product.querySelector(".price span").innerText;
-  const quantity = product.querySelector(".quantity input").value;
-  const subtotalPrice = price * quantity;
-  // console.log(subtotalPrice);
-  const subtotal = product.querySelector(".subtotal span");
-  subtotal.innerHTML = subtotalPrice;
+const button = document.querySelector('#calculate')
+button.onclick = () => {
+  console.log('button clicked!')
+  updateSubtotal()
 }
 
-function calculateAll() {
-  // code in the following two lines is added just for testing purposes.
-  // it runs when only iteration 1 is completed. at later point, it can be removed.
-  const allProducts = document.querySelectorAll(".product");
-  // for (let i = 0; i < allProducts.length; i++) {
-  //   updateSubtotal(allProducts[i]);
-  // }
 
-  allProducts.forEach((row) => {
-    updateSubtotal(row);
-  });
+const updateSubtotal = () => {
 
-  // end of test
+  let total = 0
+  let rows = document.querySelectorAll(`.product`) //Get all rows
+  rows.forEach(row => { //Get each row 
+    let price = row.querySelector('.price span').innerHTML
+    let quantity = row.querySelector('input').value
+    let subtotal = Number(price) * Number(quantity)
+    total += subtotal
+    row.querySelector('.subtotal span').innerText = subtotal //add subtotal
 
-  // ITERATION 2
-  //... your code goes here
+  })
 
-  // ITERATION 3
-  //... your code goes here
+  document.querySelector('#total-value span').innerText = total
+
 }
 
-// ITERATION 4
-
-function removeProduct(event) {
-  const target = event.currentTarget;
-  console.log("The target in remove is:", target);
-  //... your code goes here
+const makeDeleteButtonsWork = () => {
+  let rows = document.querySelectorAll(`.product`) //Get all rows
+  rows.forEach(row => { //Get each row 
+    row.querySelector('.btn-remove').onclick = function (e) {
+      row.remove() //this.parentNode.parentNode.remove() also works
+    }
+  })
 }
 
-// ITERATION 5
+makeDeleteButtonsWork() //When there is only 3 rows 
 
-function createProduct() {
-  //... your code goes here
+
+const addNewProduct = () => {
+  let newProduct = document.querySelectorAll('tfoot input')[0].value
+  let newProductPrice = document.querySelectorAll('tfoot input')[1].value
+  let newRow = `<tr class="product">
+                <td class="name">
+                  <span>${newProduct}</span>
+                </td>
+                <td class="price">$<span>${newProductPrice}</span></td>
+                <td class="quantity">
+                  <input type="number" value="0" min="0" placeholder="Quantity" />
+                </td>
+                <td class="subtotal">$<span>0</span></td>
+                <td class="action">
+                  <button class="btn btn-remove">Remove</button>
+                </td>
+              </tr>`
+  document.querySelector('tbody').innerHTML += newRow
+  makeDeleteButtonsWork() //Now there are 4 rows 
 }
 
-window.addEventListener("load", () => {
-  const calculatePricesBtn = document.getElementById("calculate");
-  calculatePricesBtn.addEventListener("click", calculateAll);
-
-  //... your code goes here
-});
+const createButton = document.querySelector('#create')
+createButton.onclick = () => {
+  console.log('create button clicked!')
+  addNewProduct()
+}
